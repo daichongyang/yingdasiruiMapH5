@@ -468,22 +468,6 @@ export default {
       script.type = "text/javascript";
       script.src = "https://res.wx.qq.com/open/js/jweixin-1.3.2.js";
       document.body.appendChild(script);
-        var ua = navigator.userAgent.toLowerCase();
-        if(ua.match(/MicroMessenger/i)=="micromessenger") {
-            //ios的ua中无miniProgram，但都有MicroMessenger（表示是微信浏览器）
-            wx.miniProgram.getEnv((res)=>{
-              if (res.miniprogram) {
-                  //  alert("在小程序里");
-                  _this.showList = true
-              } else {
-                  //  alert("不在小程序里");
-                  _this.showList = false
-              }
-            })
-        }else{
-        _this.showList = false
-        // alert('不在微信里');
-    }
       console.log("微信js异步加载完成")
     },
     gotingc(){//选择路线
@@ -578,7 +562,8 @@ export default {
       this.starPlselect.startType=this.wxInfor.startType
       this.endPlselect.endId=this.wxInfor.endId
       this.endPlselect.endType=this.wxInfor.endType
-      if(this.starPlselect.endId){
+      console.log(this.endPlselect)
+      if(this.endPlselect.endId){
         this.planassets()
       }
     }
@@ -590,7 +575,24 @@ export default {
 
     // this.classifyListtow()
     // this.selectassets(0)  
-
+    setTimeout(()=>{
+        var ua = navigator.userAgent.toLowerCase();
+        if(ua.match(/MicroMessenger/i)=="micromessenger") {
+            //ios的ua中无miniProgram，但都有MicroMessenger（表示是微信浏览器）
+            wx.miniProgram.getEnv((res)=>{
+              if (res.miniprogram) {
+                  //  alert("在小程序里");
+                  _this.showList = true
+              } else {
+                  //  alert("不在小程序里");
+                  _this.showList = false
+              }
+            })
+        }else{
+        _this.showList = false
+        // alert('不在微信里');
+    }
+    },1000)
 
   },
   components:{

@@ -4,6 +4,7 @@ import Tmap from '@/components/Tmap'
 import footMap from '@/components/footMap'
 import amapOptions from '@/components/amapOptions'
 import weixinlianjie from '@/components/weixinlianjie'
+import navigationList from '@/components/navigationList'
 
 Vue.use(Router)
 
@@ -19,12 +20,16 @@ export default new Router({
         name: 'footMap',
         component: footMap
     }, {
-        path: '/',
+        path: '/amapOptions',
         name: 'amapOptions',
         component: amapOptions
     }, {
         path: '/weixinlianjie',
         name: 'weixinlianjie',
         component: weixinlianjie
+    }, {
+        path: '/',
+        name: 'navigationList',
+        component: navigationList
     }]
 })
