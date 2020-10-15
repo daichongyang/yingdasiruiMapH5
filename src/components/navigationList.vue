@@ -4,14 +4,14 @@
     <div class='changeInfo'>
       <div class='changeInfoName'>
         <text>起点</text>
-        <input type='text' placeholder='请选择起点' v-model='starName' @blur="starValue=true"/> 
+        <input ref="input" type='text' placeholder='请选择起点' v-model='starName' @blur="starValue=true"/> 
       </div>
       <div class='changeInfoName'>
         <text>终点</text>
         <input type='text' placeholder='请选择终点' v-model='endName' @blur="starValue=false"/> 
       </div>
     </div>
-    <button class='changeBtn'>确定</button>
+    <button class='changeBtn' @click="goBack">确定</button>
   </div>
 
   <div class="addressdiv">
@@ -31,12 +31,13 @@ export default {
   data(){
     return {
       address:[],
+      endInfor:JSON.parse(this.$route.query.endInfor)||null,
       starValue:'',
       starName:'',
       endName:'',
       endValue:"",
       choisedInfor:{
-        startId:'',
+        startId:"",
         startType:'',
         endId:'',
         endType:''
@@ -69,19 +70,29 @@ export default {
         this.endName = item.name
       }
       
+    },
+    goBack(){
+      sessionStorage.setItem('choisedInfor',JSON.stringify(this.choisedInfor) )
+      console.log(sessionStorage.getItem("choisedInfor"))
+      this.$router.go(-1);
+      
     }
   },
   mounted(){
+  this.$nextTick(() => {
+    this.$refs.input.focus()
+  })
+    console.log(JSON.parse(this.$route.query.endInfor))
+    // console.log(this.$route.query.endInfor)
+    this.choisedInfor.endId = this.endInfor.id
+    this.choisedInfor.endType = this.endInfor.type
+    this.endName = this.endInfor.name
     this.selectassets()
   }
 }
 </script>
 
 <style scoped>
-/* pages/index/guided/guided.wxss */
-input{
-
-}
 .topdiv {
   display: flex;
   flex-direction: row;

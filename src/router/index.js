@@ -20,15 +20,18 @@ export default new Router({
         name: 'footMap',
         component: footMap
     }, {
-        path: '/amapOptions',
+        path: '/',
         name: 'amapOptions',
-        component: amapOptions
+        component: amapOptions,
+        meta: {
+            keepAlive: true
+        }
     }, {
         path: '/weixinlianjie',
         name: 'weixinlianjie',
         component: weixinlianjie
     }, {
-        path: '/',
+        path: '/navigationList',
         name: 'navigationList',
         component: navigationList
     }]

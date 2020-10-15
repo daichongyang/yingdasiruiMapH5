@@ -12,9 +12,7 @@
       </div>
     </div>
     <div class="baidumap" id="mapContainer"></div>
-
-    <footMap class="foot_map" @changeBottom="changeNav1" :index-id = indexId :wxInfor="wxInfor"></footMap>
-
+      <footMap class="foot_map" @changeBottom="changeNav1" :index-id = indexId :wxInfor="wxInfor"></footMap>
     <!-- 右侧 -->
     <div class="index_right">
         <!-- <img class="index_right_img" src="../assets/imgs/gy_dt_5.png" alt="" @click="userSos"> -->
@@ -34,7 +32,7 @@
               <div style="color:#727272;font-size:12px;">开放时间：全天</div>
               <div class="company_profile_cont_bottom">
                 <!-- <div class="company_profile_cont_bottom_btn">预约停车</div> -->
-                <div class="company_profile_cont_bottom_btn" @click="gotingc">到这去</div>
+                <div class="company_profile_cont_bottom_btn" @click="goNavigationList">到这去</div>
               </div>
           </div>
       </div>
@@ -117,14 +115,22 @@ export default {
       showdh:false,//停车导航
       showtop:true,//顶部显示切换
       showList:true,//列表
-      showwsj:false//卫生间selectassets
+      showwsj:false//卫生间
     }
   },
-  created(){
-    console.log("创建",JSON.parse(this.getQueryString("info")) )
-  },
   updated(){
-    console.log("更新完成",JSON.parse(this.getQueryString("info")) )
+      let obj =sessionStorage.getItem("choisedInfor")
+      obj = JSON.parse(obj)
+      console.log("更新成功："+obj)
+      if(obj){
+        this.starPlselect.startId=obj.startId
+        this.starPlselect.startType=obj.startType
+        this.endPlselect.endId=obj.endId
+        this.endPlselect.endType=obj.endType
+        this.planassets()
+      }
+      sessionStorage.clear("choisedInfor")
+
   },
   methods:{
     classifyListtow(indexId,config){////查询公园资产归类二级下拉列表
@@ -141,11 +147,11 @@ export default {
     },
     selectassets(parentId){//公园内设施列表
       this.geometries = []
+      let obj1 = {}
       let params = {
-          parentId:parentId
+          parentId:localStorage.getItem("isAction")||parentId
         }
-       let obj1 = {}
-      selectassets(params,this.config).then((res)=>{
+      selectassets(params).then((res)=>{
         console.log(res)
         if(res.data.code==200){
           this.classifyList = res.data.data.filter(item=>{
@@ -470,19 +476,17 @@ export default {
       document.body.appendChild(script);
       console.log("微信js异步加载完成")
     },
-    gotingc(){//选择路线
-      let objInfor ={
-        id:1,
-        type:2
-      }
-      objInfor = _this.objInfor
-      this.starPlselect.startId = objInfor.id
-      this.starPlselect.startType = objInfor.type
-      console.log('/pages/index/guided/guided')
-      // this.planassets()
-      wx.miniProgram.postMessage({ data: 'foo1' })
-      wx.miniProgram.navigateTo({url: '/pages/index/guided/guided?objInfor='+JSON.stringify(objInfor)})
-      wx.miniProgram.postMessage({ data: 'foo2' })
+    goNavigationList(){//选择路线
+      let obj = this.objInfor
+      obj.name = this.showInfor.name
+      obj.indexId = this.indexId
+      obj = JSON.stringify(obj)
+      this.$router.push({
+        path:'/navigationList',
+        query:{
+          endInfor:obj
+        }
+      })
     },
     goList(){//景点列表
       console.log('/pages/index/viewPoint/viewPoint')
@@ -555,27 +559,26 @@ export default {
   },
   mounted(){
     // console.log(this.getQueryString("info"))
-    console.log(JSON.parse(this.getQueryString("info")) )
+    
     this.wxInfor = JSON.parse(this.getQueryString("info"))
-    if(this.wxInfor){
-      this.starPlselect.startId=this.wxInfor.startId
-      this.starPlselect.startType=this.wxInfor.startType
-      this.endPlselect.endId=this.wxInfor.endId
-      this.endPlselect.endType=this.wxInfor.endType
-      console.log(this.endPlselect)
-      if(this.endPlselect.endId){
-        this.planassets()
-      }
-    }
-
-
+    // if(this.wxInfor){
+    //   this.starPlselect.startId=this.wxInfor.startId
+    //   this.starPlselect.startType=this.wxInfor.startType
+    //   this.endPlselect.endId=this.wxInfor.endId
+    //   this.endPlselect.endType=this.wxInfor.endType
+    //   console.log(this.endPlselect)
+    //   if(this.endPlselect.endId){
+    //     this.planassets()
+    //   }
+    // }
     // this.config.headers.Authorization = this.wxInfor.Authorization||''
     this.weixin()
     this.loadMap()
 
     // this.classifyListtow()
-    // this.selectassets(0)  
+    // this.selectassets(0)
     setTimeout(()=>{
+
         var ua = navigator.userAgent.toLowerCase();
         if(ua.match(/MicroMessenger/i)=="micromessenger") {
             //ios的ua中无miniProgram，但都有MicroMessenger（表示是微信浏览器）

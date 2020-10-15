@@ -32,6 +32,7 @@ export default {
   watch:{
     indexId(val){//地图传过来的值
       this.isAction = val
+      // sessionStorage.setItem("isAction",this.isAction)
     },
     wxInfor(val){
       console.log(val)
@@ -52,10 +53,14 @@ export default {
       })
     },
     goamapOptions(index){
+      if(index == 100){
+        localStorage.setItem("isAction",0)
+      }else{
+        localStorage.setItem("isAction",index)
+      }
       this.$nextTick(()=>{
         this.isAction = index
       })
-      console.log(index)
       this.$emit('changeBottom',index)
       // this.$router.push({
       //   path:"./"
@@ -63,7 +68,7 @@ export default {
     }
   },
   mounted(){
-
+    this.isAction =Number(localStorage.getItem("isAction"))||100
     // this.classifyListone()
   }
 }
