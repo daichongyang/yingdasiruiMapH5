@@ -1,7 +1,8 @@
 <template>
   <section style="height:100%;">
     <!-- 顶部 -->
-    <div class="index_top" v-if="showList" @click="goList">
+    <div class="index_top" v-if="showList" @click="goNavigationList">
+    <!-- <div class="index_top" v-if="showList" @click="goList"> -->
       <img class="index_top_img" src="../assets/imgs/gy_dt_13.png" alt="">
     </div>
     <div class="change_daohang" v-if="!showtop">
@@ -82,6 +83,7 @@ export default {
     _this = this
     return{ 
       aamap:'',
+      polyline:'',
       showInfor:{},
       config:{
         headers: { Authorization:''}
@@ -119,17 +121,17 @@ export default {
     }
   },
   updated(){
-      let obj =sessionStorage.getItem("choisedInfor")
-      obj = JSON.parse(obj)
-      console.log("更新成功："+obj)
-      if(obj){
-        this.starPlselect.startId=obj.startId
-        this.starPlselect.startType=obj.startType
-        this.endPlselect.endId=obj.endId
-        this.endPlselect.endType=obj.endType
-        this.planassets()
-      }
-      sessionStorage.clear("choisedInfor")
+      // let obj =sessionStorage.getItem("choisedInfor")
+      // obj = JSON.parse(obj)
+      // console.log("更新成功："+obj)
+      // if(obj){
+      //   this.starPlselect.startId=obj.startId
+      //   this.starPlselect.startType=obj.startType
+      //   this.endPlselect.endId=obj.endId
+      //   this.endPlselect.endType=obj.endType
+      //   this.planassets()
+      // }
+      // sessionStorage.clear("choisedInfor")
 
   },
   methods:{
@@ -195,6 +197,8 @@ export default {
           this.paths = res.data.data
           if(this.paths.length==0){
             alert("暂时还未规划路线")
+          }else{
+            this.playLine(this.paths)
           }
         }
       })
@@ -235,6 +239,7 @@ export default {
       console.log(val)
       this.indexId = val
       this.markerLayer.setGeometries([])
+      this.polyline.remove("polyline")
       if(val==100){
         this.selectassets(0)
       }else{
@@ -266,6 +271,18 @@ export default {
         // })
         // _this.addMarkerinfoWindow()
         _this.selectassets(0)
+        
+        let obj =sessionStorage.getItem("choisedInfor")//用于画图
+        obj = JSON.parse(obj)
+        console.log("更新成功："+obj)
+        if(obj){
+          this.starPlselect.startId=obj.startId
+          this.starPlselect.startType=obj.startType
+          this.endPlselect.endId=obj.endId
+          this.endPlselect.endType=obj.endType
+          this.planassets()
+        }
+        sessionStorage.clear("choisedInfor")
         // _this.dinwei()
         // _this.playLine()
         TMap.ImageTileLayer.createCustomLayer({
@@ -433,7 +450,7 @@ export default {
           pathsArr.push(new TMap.LatLng(item.latitude,item.longitude))
         });
       }
-     let polyline = new TMap.MultiPolyline({
+     this.polyline = new TMap.MultiPolyline({
           id: 'polyline-layer',
           map: _this.mapObj,
           styles: {

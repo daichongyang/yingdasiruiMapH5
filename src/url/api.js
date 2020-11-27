@@ -7,4 +7,4 @@ export const userSos = (params) => { return axios.post("/park/Message/userSos", 
 export const classifyListtow = (params) => { return axios.post("/park/assets/classify/list/select", params) } //查询公园资产归类二级下拉列表
 export const classifyListone = (params) => { return axios.post("/park/assets/classify/list/select/one", params) } //查询公园资产归类一级下拉列表
 export const selectassets = (params) => { return axios.post("/park/v1.0/app/park/select/assets", params) } //公园内设施列表
-export const planassets = (params) => { return axios.post("/park/way/plan/select", params) } //查询导航路线/
+export const planassets = (params) => { return axios.post("/park/way/plan/select", params) } //查询导航路线
