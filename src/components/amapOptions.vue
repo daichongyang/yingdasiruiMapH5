@@ -32,7 +32,7 @@
               <div style="color:#727272;font-size:12px;">单层停车场，共53个车位</div>
               <div style="color:#727272;font-size:12px;">开放时间：全天</div>
               <div class="company_profile_cont_bottom">
-                <!-- <div class="company_profile_cont_bottom_btn">预约停车</div> -->
+                <div class="company_profile_cont_bottom_btn">预约</div>
                 <div class="company_profile_cont_bottom_btn" @click="goNavigationList">到这去</div>
               </div>
           </div>
@@ -522,7 +522,7 @@ export default {
   　　    return null; 
       },
     getQueryString1(name){//接收小程序传来的参数
-    console.log("接收小程序传来的参数1"+name)
+      console.log("接收小程序传来的参数1"+name)
       console.log("地址："+window.location)
         var query = window.location.hash.substring(4);
         // var query = window.location.search.substring(1);
