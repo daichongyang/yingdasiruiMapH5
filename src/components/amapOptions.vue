@@ -1,8 +1,8 @@
 <template>
   <section style="height:100%;">
     <!-- 顶部 -->
-    <div class="index_top" v-if="showList" @click="goNavigationList">
-    <!-- <div class="index_top" v-if="showList" @click="goList"> -->
+    <!-- <div class="index_top" v-if="showList" @click="goNavigationList"> -->
+    <div class="index_top" v-if="showList" @click="goList">
       <img class="index_top_img" src="../assets/imgs/gy_dt_13.png" alt="">
     </div>
     <div class="change_daohang" v-if="!showtop">
@@ -32,7 +32,7 @@
               <div style="color:#727272;font-size:12px;">单层停车场，共53个车位</div>
               <div style="color:#727272;font-size:12px;">开放时间：全天</div>
               <div class="company_profile_cont_bottom">
-                <div class="company_profile_cont_bottom_btn">预约</div>
+                <div class="company_profile_cont_bottom_btn" @click="goAppointment">预约</div>
                 <div class="company_profile_cont_bottom_btn" @click="goNavigationList">到这去</div>
               </div>
           </div>
@@ -235,15 +235,24 @@ export default {
     //   var end = new BMap.Point(114.987516 ,22.84);
     //   walking.search(start, end);
     // },
+    goAppointment(){//去预约
+      console.log('/pages/index/facilityAppointment/facilityAppointment')
+      let obj = this.showInfor
+      wx.miniProgram.postMessage({ data: obj.id })
+      wx.miniProgram.navigateTo({url: '/pages/index/facilityAppointment/facilityAppointment?data='+obj.id})
+    },
     changeNav1(val){
       console.log(val)
       this.indexId = val
       this.markerLayer.setGeometries([])
-      this.polyline.remove("polyline")
+      
       if(val==100){
         this.selectassets(0)
       }else{
         this.selectassets(val)
+      }
+      if(this.polyline){
+        this.polyline.remove("polyline")
       }
     },
     goBack(){
@@ -440,6 +449,7 @@ export default {
           _this.objInfor.type=evt.geometry.properties.type
           _this.showtc= true
           _this.showInfor.name = evt.geometry.properties.name
+          _this.showInfor.id = evt.geometry.properties.id
           console.log(_this.objInfor)
       })
     },

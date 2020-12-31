@@ -96,6 +96,12 @@ export default {
 .topdiv {
   display: flex;
   flex-direction: row;
+  height:340px;
+  position:fixed;
+  top:0px;
+  left:0px;
+  width:100%;
+  background:white;
 }
 
 .changeInfo{
@@ -147,7 +153,7 @@ export default {
 
 .addressdiv {
   background-color: #f7f7f7;
-  padding-top: 20px;
+  padding-top: 360px;
 }
 
 .address_item {
