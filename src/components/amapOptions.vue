@@ -148,11 +148,20 @@ export default {
       })
     },
     selectassets(parentId){//公园内设施列表
+      console.log(localStorage.getItem("isAction"),parentId)
       this.geometries = []
+      let params
       let obj1 = {}
-      let params = {
-          parentId:localStorage.getItem("isAction")||parentId
+      if(localStorage.getItem("isAction")=='undefined'){
+      params = {
+          parentId:parentId
         }
+      }else{
+       params = {
+          parentId:localStorage.getItem("isAction")
+        }   
+      }
+
       selectassets(params).then((res)=>{
         console.log(res)
         if(res.data.code==200){
@@ -254,6 +263,7 @@ export default {
       if(this.polyline){
         this.polyline.remove("polyline")
       }
+      
     },
     goBack(){
       this.$router.go(-1)
@@ -587,18 +597,8 @@ export default {
   mounted(){
     // console.log(this.getQueryString("info"))
     
-    this.wxInfor = JSON.parse(this.getQueryString("info"))
-    // if(this.wxInfor){
-    //   this.starPlselect.startId=this.wxInfor.startId
-    //   this.starPlselect.startType=this.wxInfor.startType
-    //   this.endPlselect.endId=this.wxInfor.endId
-    //   this.endPlselect.endType=this.wxInfor.endType
-    //   console.log(this.endPlselect)
-    //   if(this.endPlselect.endId){
-    //     this.planassets()
-    //   }
-    // }
-    // this.config.headers.Authorization = this.wxInfor.Authorization||''
+    this.wxInfor = JSON.parse(this.getQueryString("info"))||16
+
     this.weixin()
     this.loadMap()
 

@@ -37,7 +37,9 @@ export default {
     wxInfor(val){
       console.log(val)
       // this.Authorization  = val.Authorization
-      this.classifyListone()
+      if(val&&val.carId){
+        this.goamapOptions(val.carId)
+      }
     }
   },
   methods:{
@@ -69,7 +71,7 @@ export default {
   },
   mounted(){
     this.isAction =Number(localStorage.getItem("isAction"))||100
-    // this.classifyListone()
+    this.classifyListone()
   }
 }
 </script>
